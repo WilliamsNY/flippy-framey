@@ -24,7 +24,9 @@ article > p{
 </head>
 <body>
 	<!-- you need a canvas for flippy-framey to work -->
-	<canvas id="canvas"></canvas>
+	<div id="easel">
+		<canvas id="canvas"></canvas>
+	</div>
 
 	<!-- source video courtesy of... -->
 	<aside class="attribution">
@@ -60,7 +62,7 @@ $(function(){
 
 	// contain element stuff
 	var contain = new ContainElement({
-		id: 'canvas',
+		id: 'easel',
 		height: $window.height(),
 		width: $window.width(),
 		valign: 'center',
