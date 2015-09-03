@@ -7,7 +7,34 @@ function flippyFramey(opt){
 		such that the user will be able to check up on state
 		and make changes to the function's behaviour at runtime
 	*/
-	var flipper={};
+	var flipper={
+		// event hooks
+		on:{},
+		stacks:{},
+		invoke:{},
+	};
+
+	// forEach event type
+	[	'upgradeSuccess', // image upgrades
+		'upgradeFailure', // failure to upgrade after flipper.upgradeTries attempts
+		'fetchCompletion', // fetching of the last thumbnail
+		'draw', // draw operations
+	].forEach(function(hook){
+		//declare a stack
+		flipper.stacks[hook]=[];
+
+		// and an 'on' method which will push to that stack
+		flipper.on[hook]=function(f){
+			if(typeof f == 'function'){
+				flipper.stacks[hook].push(f);
+			}
+		};
+
+		// and a convenient callback for invocation on the occurrence of that event
+		flipper.invoke[hook]=function(){
+			invoke(flipper.stacks[hook]);
+		};
+	});
 
 	flipper.canvasId=opt.canvas=opt.canvas||'canvas';
 	
@@ -22,6 +49,7 @@ function flippyFramey(opt){
 		console.error("flippyFramey expects an object which specifies details \
 regarding your thumbnail image set. \
 See https://github.com/WilliamsNY/flippy-framey for more details");
+
 		console.log("There are no sensible defaults we can assume.\
         \nTerminating flippyFramey execution NOW.");
 		return;
@@ -29,12 +57,12 @@ See https://github.com/WilliamsNY/flippy-framey for more details");
 		// they passed in a value, for now let's just assume it's valid
 		// FIXME actually validate their input?
 		var thumbs=flipper.thumbs=opt.thumbs;
+		thumbs.images={};
 		/*
 			They should have passed:
 				width: a positive integer,
 				height: a positive integer,
 				scheme: a function which returns a url when given an index,
-				images: an array,
 				index: a non-negative integer, probably 0
 		*/
 	}
@@ -52,6 +80,7 @@ See https://github.com/WilliamsNY/flippy-framey for more details");
 		// 'full' will only be defined if they passed it
 		// so make sure your references to it are conditional upon the existence of 'flipper.canUpgrade'
 		var full=flipper.full=opt.full;
+		full.images={};
 
 		// TODO validate flipper.full using the same criteria applied to flipper.thumbs (once that's done)
 		// unlike thumbs, full's images attribute should refer to an object, not an array
@@ -77,16 +106,17 @@ See https://github.com/WilliamsNY/flippy-framey for more details");
 	// expose internal state (and functions) such that they can be hooked into a controller
 	return flipper;
 
-	// drop generally useful functions down here
-
+	// nothing but hoisted functions from here on
 	function fetchThumbs(){
 		var interval=window.setInterval(function(){
-			var src=thumbs.scheme(thumbs.index++);
+			var src=thumbs.scheme(thumbs.index);
 			console.log(src);
-			thumbs.images.push(cache_image(src));
+			thumbs.images[thumbs.index]=cache_image(src);
 
+			thumbs.index++;
 			if(thumbs.index>=opt.frames){
 				window.clearInterval(interval);
+				flipper.invoke.fetchCompletion();
 			}
 		},50);
 	};
@@ -103,10 +133,7 @@ See https://github.com/WilliamsNY/flippy-framey for more details");
 			flipper.canvasElement.width,
 			flipper.canvasElement.height);
 		// after an image has been drawn to the canvas..
-		if(flipper.canUpgrade){
-			// set a singleton timeout such that if the image is not changed
-			// it will upgrade to a full quality version of the same image
-		}
+		flipper.invoke.draw();
 	};
 
 	// wrap up drawImage since you probably just want to specify the index of the image
@@ -145,6 +172,7 @@ See https://github.com/WilliamsNY/flippy-framey for more details");
 						// if you have it, draw it and terminate the interval
 						if(is_cached(fullSrc)){
 							drawFull(index);
+							flipper.invoke.upgradeSuccess();
 							window.clearInterval(flipper.pendingUpgrade);
 							return;
 						}else{
@@ -153,6 +181,7 @@ See https://github.com/WilliamsNY/flippy-framey for more details");
 								// you failed to cache the image in the specified number of tries
 								// give up
 								window.clearInterval(flipper.pendingUpgrade);
+								flipper.invoke.upgradeFailure();
 								return;
 							}
 						}
@@ -176,16 +205,22 @@ See https://github.com/WilliamsNY/flippy-framey for more details");
 		}
 	};
 
-	// check if an image exists in your browser's cache
-	function is_cached(src) {
-		var image = new Image();
-		image.src = src;
-		return image.complete;
-	};
-
+	// cache an image
 	function cache_image(src){
 		var img = new Image();
 		img.src= src;
 		return img;
+	};
+
+	// check if an image exists in your browser's cache
+	function is_cached(src) {
+		return cache_image(src).complete;
+	};
+
+	// invoke a stack of functions with the flipper object as an argument
+	function invoke(stack){
+		stack.forEach(function(func){
+			func(flipper);
+		});
 	};
 }
