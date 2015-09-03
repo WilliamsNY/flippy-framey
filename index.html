@@ -5,7 +5,7 @@
 	<meta http-equiv="Content-Type" charset="UTF-8">
 	<style>
 html,body{
-	height:20000px;
+	height:35000px;
 	margin:0px;
 	padding:0px;
 	background:black;
@@ -37,11 +37,6 @@ article > p.visible{
 	<!-- you need a canvas for flippy-framey to work -->
 	<canvas id="canvas"></canvas>
 
-	<!-- source video courtesy of... -->
-	<aside class="attribution">
-		<p> Video for flippy-framey demo sourced from <a href="http://mazwai.com/#174">Mazwai.com</a>::<a href="http://mazwai.com/#174">"FIREWORKS IN PARIS"</a>, released unded the Creative Commons Attribution License 3.0.</p>
-	</aside>
-
 	<article>
 		<!-- text for what flippy framey is supposed to do -->
 		<p><a href="https://github.com/WilliamsNY/flippy-framey" title="flippy-framey">flippyFramey</a> is a Javascript plugin for fetching and drawing jpeg images to a canvas with a simple API.</p>
@@ -55,6 +50,11 @@ article > p.visible{
 		<!-- what this page is an example of -->
 		<p>This page is utilizes flippyFramey, rollyScrolly, and contain-element to build a full-screen, canvas-powered flipbook animation that animates in sync with your scroll position.</p>
 
+		<!-- attribution -->
+		<p>Video for flippy-framey demo sourced from <a href="http://mazwai.com/#174">Mazwai.com</a>::<a href="http://mazwai.com/#174">"FIREWORKS IN PARIS"</a>, released unded the Creative Commons Attribution License 3.0.</p>
+
+		<!-- find us on github -->
+		<p>Built by <a href="http://williamsnewyork.com/">William's New York</a>. Check out our source on <a href="https://github.com/williamsny/">Github</a></p>
 	</article>
 
 	</body>
@@ -120,10 +120,11 @@ $(function(){
 	// rollyScrolly stuff starts here
 	var events={};
 
-	[	[25,'describe flippyFramey'],
-		[50,'describe rollyScrolly'],
-		[75,'describe contain-element'],
-		[100,'describe this page'],
+	[	[33,'describe flippyFramey'],
+		[66,'describe rollyScrolly'],
+		[100,'describe contain-element'],
+		[133,'describe this page'],
+		[166,'attribution'],
 	].forEach(function(A,index){
 		events[A[0]]={
 			func:function(state){
