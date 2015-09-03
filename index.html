@@ -128,7 +128,10 @@ $(function(){
 		events[A[0]]={
 			func:function(state){
 				$('article > p').removeClass('visible');
-				$('article > p:nth-Child('+index+')').addClass('visible');
+				$('article > p:nth-Child('+(1+index)+')').addClass('visible');
+				console.log({
+					position:state.position,
+				});
 			},
 			label:A[1],
 		};
