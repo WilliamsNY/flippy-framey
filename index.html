@@ -18,7 +18,11 @@ html,body{
 	left:0px;
 }
 article > p{
-	display:none;
+	opacity:0;
+	transition: opacity 400ms;
+}
+article > p.visible{
+	opacity:1;
 }
 	</style>
 </head>
@@ -94,11 +98,11 @@ $(function(){
 		index:0,
 	};
 
-    // 
+	var totalFrames=200;
 	var flipped=Page.flipped=flippyFramey({
 		thumbs:thumbs,
 		full:full,
-		frames:199,
+		frames:totalFrames-1, // ugly hack
 		upgradeDelay:50,
 		upgradeTries:10,
 	});
@@ -109,19 +113,19 @@ $(function(){
 	// rollyScrolly stuff starts here
 	var events={};
 
-/*
-	[	[0,'first frame'],
-		[50,'halfway done'],
-		[99,'last frame'],
-	].forEach(function(A){
+	[	[25,'describe flippyFramey'],
+		[50,'describe rollyScrolly'],
+		[75,'describe contain-element'],
+		[100,'describe this page'],
+	].forEach(function(A,index){
 		events[A[0]]={
-			func:function(state,index){
-				$target2.html(A[1]);
+			func:function(state){
+				$('article > p').removeClass('visible');
+				$('article > p:nthChild('+index+')').addClass('visible');
 			},
 			label:A[1],
 		};
 	});
-*/
 
 	var scrollStack=[
 	{
