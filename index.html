@@ -35,69 +35,74 @@ html,body{
 <script>
 
 $(function(){
-    // flippyFramey things
-    var thumbs={
-        width:960,
-        height:540,
-        images:[],
-        scheme:function(index){
-            return 'http://williamsny.github.io/flippy-framey/frames/thumbs/image-'+(index+1)+'.jpg';
-        },
-        index:0,
-    };
+	var $window=$(window);
+	var canvas=document.getElementById('canvas');
+	canvas.width=$window.width();
+	canvas.height=$window.height();
+		
+	// flippyFramey things
+	var thumbs={
+		width:960,
+		height:540,
+		images:[],
+		scheme:function(index){
+			return 'http://williamsny.github.io/flippy-framey/frames/thumbs/image-'+(index+1)+'.jpg';
+		},
+		index:0,
+	};
 
-    var full={
-        width:1920,
-        height:1080,
-        images:[],
-        scheme:function(index){
-            return 'http://williamsny.github.io/flippy-framey/frames/full/image-'+(index+1)+'.jpg';
-        },
-        index:0,
-    };
+	var full={
+		width:1920,
+		height:1080,
+		images:[],
+		scheme:function(index){
+			return 'http://williamsny.github.io/flippy-framey/frames/full/image-'+(index+1)+'.jpg';
+		},
+		index:0,
+	};
 
-    // fall back to global scope for now so we can debug
-    var flipped=flippyFramey({
-        thumbs:thumbs,
-        full:full,
-        frames:199,
-        upgradeDelay:50,
-        upgradeTries:10,
-    });
+	// fall back to global scope for now so we can debug
+	var flipped=flippyFramey({
+		thumbs:thumbs,
+		full:full,
+		frames:199,
+		upgradeDelay:50,
+		upgradeTries:10,
+	});
 
-    // actually go get the thumbs
-    flipped.fetchThumbs();
+	// actually go get the thumbs
+	flipped.fetchThumbs();
 
-    // rollyScrolly stuff starts here
-    var events={};
+	// rollyScrolly stuff starts here
+	var events={};
 
-    [   [0,'first frame'],
-        [50,'halfway done'],
-        [99,'last frame'],
-    ].forEach(function(A){
-            events[A[0]]={
-                func:function(state,index){
-                    $target2.html(A[1]);
-                },
-                label:A[1],
-            };
-        });
+	[	[0,'first frame'],
+		[50,'halfway done'],
+		[99,'last frame'],
+	].forEach(function(A){
+		events[A[0]]={
+			func:function(state,index){
+				$target2.html(A[1]);
+			},
+			label:A[1],
+		};
+	});
 
-    var scrollStack=[
-        {
-            func:function(state,index){
-                flipped.drawThumb(state.position);
-            },
-            label: 'draw image',
-        },
-    ];
+	var scrollStack=[
+	{
+		func:function(state,index){
+			flipped.drawThumb(state.position);
+		},
+			label: 'draw image',
+		},
+	];
 
-    var rollyScrolled=rollyScrolly({
-        container:'body',
-        frames:220,
-        events:events,
-        stack:scrollStack
-    });
+	var rollyScrolled=rollyScrolly({
+		container:'body',
+		frames:220,
+		events:events,
+		stack:scrollStack
+	});
 });
 
 </script>
