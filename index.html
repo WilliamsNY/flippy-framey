@@ -19,6 +19,7 @@ html,body{
 }
 article > p{
 	opacity:0;
+	z-index:100;
 	transition: opacity 400ms;
 }
 article > p.visible{
@@ -121,7 +122,7 @@ $(function(){
 		events[A[0]]={
 			func:function(state){
 				$('article > p').removeClass('visible');
-				$('article > p:nthChild('+index+')').addClass('visible');
+				$('article > p:nth-Child('+index+')').addClass('visible');
 			},
 			label:A[1],
 		};
