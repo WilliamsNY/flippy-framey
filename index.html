@@ -1,1 +1,104 @@
-Flippy Framey
+<!DOCTYPE html>
+<html lang="en-ca">
+<head>
+	<title>flippy-framey</title>
+	<meta http-equiv="Content-Type" charset="UTF-8">
+	<style>
+html,body{
+	height:10000px;
+	margin:0px;
+	padding:0px;
+	background:black;
+}
+#canvas{
+	position:fixed;
+	height:100vh;
+	width:100%;
+	top:0px;
+	left:0px;
+}
+
+	</style>
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+
+	<aside class="attribution">
+		<p> Video for flippy-framey demo sourced from <a href="http://mazwai.com/#174">Mazwai.com</a>::<a href="http://mazwai.com/#174">"FIREWORKS IN PARIS"</a>, released unded the Creative Commons Attribution License 3.0.</p>
+	</aside>
+
+
+	</body>
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="https://raw.githubusercontent.com/WilliamsNY/rolly-scrolly/master/rolly-scrolly.js"></script>
+<script type="text/javascript" src="https://raw.githubusercontent.com/WilliamsNY/flippy-framey/master/flippy-framey.js"></script>
+<script>
+
+$(function(){
+    // flippyFramey things
+    var thumbs={
+        width:960,
+        height:540,
+        images:[],
+        scheme:function(index){
+            return 'http://williamsny.github.io/flippy-framey/frames/thumbs/image-'+(index+1)+'.jpg';
+        },
+        index:0,
+    };
+
+    var full={
+        width:1920,
+        height:1080,
+        images:[],
+        scheme:function(index){
+            return 'http://williamsny.github.io/flippy-framey/frames/full/image-'+(index+1)+'.jpg';
+        },
+        index:0,
+    };
+
+    // fall back to global scope for now so we can debug
+    var flipped=flippyFramey({
+        thumbs:thumbs,
+        full:full,
+        frames:99,
+        upgradeDelay:50,
+        upgradeTries:10,
+    });
+
+    // actually go get the thumbs
+    flipped.fetchThumbs();
+
+    // rollyScrolly stuff starts here
+    var events={};
+
+    [   [0,'first frame'],
+        [50,'halfway done'],
+        [99,'last frame'],
+    ].forEach(function(A){
+            events[A[0]]={
+                func:function(state,index){
+                    $target2.html(A[1]);
+                },
+                label:A[1],
+            };
+        });
+
+    var scrollStack=[
+        {
+            func:function(state,index){
+                flipped.drawThumb(state.position);
+            },
+            label: 'draw image',
+        },
+    ];
+
+    var rollyScrolled=rollyScrolly({
+        container:'body',
+        frames:100,
+        events:events,
+        stack:scrollStack
+    });
+});
+
+</script>
+</html>
