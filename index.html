@@ -17,26 +17,59 @@ html,body{
 	top:0px;
 	left:0px;
 }
-
+article > p{
+	display:none;
+}
 	</style>
 </head>
 <body>
+	<!-- you need a canvas for flippy-framey to work -->
 	<canvas id="canvas"></canvas>
 
+	<!-- source video courtesy of... -->
 	<aside class="attribution">
 		<p> Video for flippy-framey demo sourced from <a href="http://mazwai.com/#174">Mazwai.com</a>::<a href="http://mazwai.com/#174">"FIREWORKS IN PARIS"</a>, released unded the Creative Commons Attribution License 3.0.</p>
 	</aside>
 
+	<article>
+		<!-- text for what flippy framey is supposed to do -->
+		<p>[flippyFramey](https://github.com/WilliamsNY/flippy-framey) is a Javascript plugin for fetching and drawing jpegs images to a canvas with a simple API.</p>
+
+		<!-- text for what rolly-scrolly is supposed to do -->
+		<p>[rollyScrolly](https://github.com/WilliamsNY/rolly-scrolly) is a Javascript plugin for binding events to discrete sections of  scrollable area within a web page, also via a simple API.</p>
+
+		<!-- text for what contain-element is supposed to do -->
+		<p>[contain-element](https://github.com/WilliamsNY/contain-element) is a Javascript plugin for containing an element within its parent element.</p>
+
+		<!-- what this page is an example of -->
+		<p>This page is utilizes flippyFramey, rollyScrolly, and contain-element to build a full-screen, canvas-powered flipbook animation that animates in sync with your scroll position.</p>
+
+	</article>
 
 	</body>
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript" src="https://rawgit.com/WilliamsNY/rolly-scrolly/master/rolly-scrolly.js"></script>
 <script type="text/javascript" src="https://rawgit.com/WilliamsNY/flippy-framey/master/flippy-framey.js"></script>
+<script type="text/javascript" src="https://rawgit.com/WilliamsNY/contain-element/master/contain-element.js"></script>
 <script>
-
+// copy some variables out here so we can debug with the console
+var Page={};
 $(function(){
 	var $window=$(window);
 	var canvas=document.getElementById('canvas');
+
+	// contain element stuff
+	var contain = new ContainElement({
+		id: 'canvas',
+		height: $window.height(),
+		width: $window.width(),
+		valign: 'center',
+		halign: 'center',
+	});
+
+	// make sure the canvas stays contained
+	$window.resize(contain.update).on('orientationchange', contain.update);
+
 	canvas.width=$window.width();
 	canvas.height=$window.height();
 		
@@ -44,7 +77,6 @@ $(function(){
 	var thumbs={
 		width:960,
 		height:540,
-		images:[],
 		scheme:function(index){
 			return 'http://williamsny.github.io/flippy-framey/frames/thumbs/image-'+(index+1)+'.jpg';
 		},
@@ -54,15 +86,14 @@ $(function(){
 	var full={
 		width:1920,
 		height:1080,
-		images:[],
 		scheme:function(index){
 			return 'http://williamsny.github.io/flippy-framey/frames/full/image-'+(index+1)+'.jpg';
 		},
 		index:0,
 	};
 
-	// fall back to global scope for now so we can debug
-	var flipped=flippyFramey({
+    // 
+	var flipped=Page.flipped=flippyFramey({
 		thumbs:thumbs,
 		full:full,
 		frames:199,
