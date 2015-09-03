@@ -24,9 +24,7 @@ article > p{
 </head>
 <body>
 	<!-- you need a canvas for flippy-framey to work -->
-	<div id="easel">
-		<canvas id="canvas"></canvas>
-	</div>
+	<canvas id="canvas"></canvas>
 
 	<!-- source video courtesy of... -->
 	<aside class="attribution">
@@ -61,6 +59,7 @@ $(function(){
 	var canvas=document.getElementById('canvas');
 
 	// contain element stuff
+	/*
 	var contain = new ContainElement({
 		id: 'easel',
 		height: $window.height(),
@@ -68,9 +67,10 @@ $(function(){
 		valign: 'center',
 		halign: 'center',
 	});
+	*/
 
 	// make sure the canvas stays contained
-	$window.resize(contain.update).on('orientationchange', contain.update);
+//	$window.resize(contain.update).on('orientationchange', contain.update);
 
 	canvas.width=$window.width();
 	canvas.height=$window.height();
