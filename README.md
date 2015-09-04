@@ -6,6 +6,7 @@ Efficiently load and display images in the classic flipbook style.
 
 We wanted to be able to build web pages that featured animations in the classic [flipbook style](https://www.youtube.com/watch?v=UocF4ycBnYE) which could be driven by [scroll position](https://github.com/WilliamsNY/rolly-scrolly), or feasibly some other incrementor/decrementor.
 
+You can see an example [here](http://williamsny.github.io/flippy-framey/).
 
 ## Features
 
