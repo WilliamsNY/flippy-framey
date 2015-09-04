@@ -1,0 +1,16 @@
+{
+  "name": "flippy-framey",
+  "description": "A JavaScript plugin to efficiently load and display images in the classic flipbook style.",
+  "authors": [
+    "Aaron MacSween"
+  ],
+  "license": "MIT",
+  "main": "./flippy-framey.min.js",
+  "ignore": [
+    "**/.*"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/WilliamsNY/flippy-framey.git"
+  }
+}
