@@ -10,10 +10,17 @@
                 padding: 0px;
                 background: black;
             }
-            #canvas{
+            #canvas-container {
                 position: fixed;
-                height: 100vh;
                 width: 100%;
+                height: 100vh;
+                top: 0px;
+                left: 0px;
+            }
+            #canvas{
+                position: absolute;
+                width: 1920px;
+                height: 1080px;
                 top: 0px;
                 left: 0px;
             }
@@ -65,7 +72,9 @@
     </head>
     <body>
         <!-- you need a canvas for flippy-framey to work -->
-        <canvas id="canvas"></canvas>
+        <div id="canvas-container">
+            <canvas id="canvas"></canvas>
+        </div>
 
         <p class="start">Start scrolling!!! <span>↓</span></p>
 
@@ -100,22 +109,20 @@
         // Scroll to the top on page load
         $(document).ready(function(){
             $(this).scrollTop(0);
+
+            // contain element stuff
+            var contain = new ContainElement({
+                id: 'canvas',
+                valign: 'center',
+                halign: 'center'
+            });
+            window.onresize = contain.update;
+            window.addEventListener('orientationchange', contain.update);
         });
 
         $(function() {
             var $window=$(window);
             var canvas=document.getElementById('canvas');
-
-            // contain element stuff
-            /*
-               var contain = new ContainElement({
-               id: 'easel',
-               height: $window.height(),
-               width: $window.width(),
-               valign: 'center',
-               halign: 'center',
-               });
-             */
 
             // make sure the canvas stays contained
             //  $window.resize(contain.update).on('orientationchange', contain.update);
