@@ -1,160 +1,195 @@
 <!DOCTYPE html>
 <html lang="en-ca">
-<head>
-	<title>flippy-framey</title>
-	<meta http-equiv="Content-Type" charset="UTF-8">
-	<style>
-html,body{
-	height:35000px;
-	margin:0px;
-	padding:0px;
-	background:black;
-}
-#canvas{
-	position:fixed;
-	height:100vh;
-	width:100%;
-	top:0px;
-	left:0px;
-}
-article > p{
-	position:fixed;
-	width: 80vw;
-	left: 10vw;
-	top:35vh;	
+    <head>
+        <title>flippy-framey</title>
+        <meta http-equiv="Content-Type" charset="UTF-8">
+        <style>
+            html, body{
+                height: 10000px;
+                margin: 0px;
+                padding: 0px;
+                background: black;
+            }
+            #canvas{
+                position: fixed;
+                height: 100vh;
+                width: 100%;
+                top: 0px;
+                left: 0px;
+            }
+            p {
+                font-weight: bold;
+                font-family:  ‘Arial Black’, Gadget, sans-serif;
+                color: #f1f1f1;
+            }
+            article > p{
+                position: fixed;
+                width: 84%;
+                left: 8%;
+                top: 35vh;
+                z-index: 100;
+                visibility: hidden;
+            }
+            article > p span {
+                opacity: 0;
+                transition: opacity 1500ms;
+            }
+            article > p.visible {
+                visibility: visible;
+            }
+            article > p.visible span {
+                opacity: 1;
+            }
+            article p a {
+                text-decoration: none;
+                color: #4db5fa;
+            }
+            article p a:hover {
+                text-decoration: underline;
+            }
+            p.start {
+                position: relative;
+                text-align: center;
+                color: #f1f1f1;
+                font-size: 36px;
+                text-transform: uppercase;
+            }
+            p.start span {
+                position: relative;
+                top: 4px;
+                left: 4px;
+                font-size: 64px;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- you need a canvas for flippy-framey to work -->
+        <canvas id="canvas"></canvas>
 
-	color:white;
-	opacity:0;
-	z-index:100;
-	transition: opacity 1500ms;
-}
-article > p.visible{
-	opacity:1;
-}
-	</style>
-</head>
-<body>
-	<!-- you need a canvas for flippy-framey to work -->
-	<canvas id="canvas"></canvas>
+        <p class="start">Start scrolling!!! <span>↓</span></p>
 
-	<article>
-		<!-- text for what flippy framey is supposed to do -->
-		<p><a href="https://github.com/WilliamsNY/flippy-framey" title="flippy-framey">flippyFramey</a> is a Javascript plugin for fetching and drawing jpeg images to a canvas with a simple API.</p>
+        <article>
+            <!-- text for what flippy framey is supposed to do -->
+            <p><span><a href="https://github.com/WilliamsNY/flippy-framey" title="flippy-framey">flippyFramey</a> is a Javascript plugin for fetching and drawing jpeg images to a canvas with a simple API.</span></p>
 
-		<!-- text for what rolly-scrolly is supposed to do -->
-		<p><a href="https://github.com/WilliamsNY/rolly-scrolly" title="rolly-scrolly">rollyScrolly</a> is a Javascript plugin for binding events to discrete sections of  scrollable area within a web page, also via a simple API.</p>
+            <!-- text for what rolly-scrolly is supposed to do -->
+            <p><span><a href="https://github.com/WilliamsNY/rolly-scrolly" title="rolly-scrolly">rollyScrolly</a> is a Javascript plugin for binding events to discrete sections of  scrollable area within a web page, also via a simple API.</span></p>
 
-		<!-- text for what contain-element is supposed to do -->
-		<p><a href="https://github.com/WilliamsNY/contain-element" title="contain-element">contain-element</a> is a Javascript plugin for containing an element within its parent element.</p>
+            <!-- text for what contain-element is supposed to do -->
+            <p><span><a href="https://github.com/WilliamsNY/contain-element" title="contain-element">contain-element</a> is a Javascript plugin for containing an element within its parent element.</span></p>
 
-		<!-- what this page is an example of -->
-		<p>This page is utilizes flippyFramey, rollyScrolly, and contain-element to build a full-screen, canvas-powered flipbook animation that animates in sync with your scroll position.</p>
+            <!-- what this page is an example of -->
+            <p><span>This page is utilizes flippyFramey, rollyScrolly, and contain-element to build a full-screen, canvas-powered flipbook animation that animates in sync with your scroll position.</span></p>
 
-		<!-- attribution -->
-		<p>Video for flippy-framey demo sourced from <a href="http://mazwai.com/#174">Mazwai.com</a>::<a href="http://mazwai.com/#174">"FIREWORKS IN PARIS"</a>, released unded the Creative Commons Attribution License 3.0.</p>
+            <!-- attribution -->
+            <p><span>Video for flippy-framey demo sourced from <a href="http://mazwai.com/#174">Mazwai.com</a>::<a href="http://mazwai.com/#174">"FIREWORKS IN PARIS"</a>, released unded the Creative Commons Attribution License 3.0.</span></p>
 
-		<!-- find us on github -->
-		<p>Built by <a href="http://williamsnewyork.com/">William's New York</a>. Check out our source on <a href="https://github.com/williamsny/">Github</a></p>
-	</article>
+            <!-- find us on github -->
+            <p><span>Built by <a href="http://williamsnewyork.com/">William's New York</a>. Check out our source on <a href="https://github.com/williamsny/">Github</a></span></p>
+        </article>
+    </body>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="https://rawgit.com/WilliamsNY/rolly-scrolly/master/rolly-scrolly.js"></script>
+    <script type="text/javascript" src="https://rawgit.com/WilliamsNY/flippy-framey/master/flippy-framey.js"></script>
+    <script type="text/javascript" src="https://rawgit.com/WilliamsNY/contain-element/master/contain-element.js"></script>
+    <script>
+        // copy some variables out here so we can debug with the console
+        var Page={};
 
-	</body>
-<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-<script type="text/javascript" src="https://rawgit.com/WilliamsNY/rolly-scrolly/master/rolly-scrolly.js"></script>
-<script type="text/javascript" src="https://rawgit.com/WilliamsNY/flippy-framey/master/flippy-framey.js"></script>
-<script type="text/javascript" src="https://rawgit.com/WilliamsNY/contain-element/master/contain-element.js"></script>
-<script>
-// copy some variables out here so we can debug with the console
-var Page={};
-$(function(){
-	var $window=$(window);
-	var canvas=document.getElementById('canvas');
+        // Scroll to the top on page load
+        $(document).ready(function(){
+            $(this).scrollTop(0);
+        });
 
-	// contain element stuff
-	/*
-	var contain = new ContainElement({
-		id: 'easel',
-		height: $window.height(),
-		width: $window.width(),
-		valign: 'center',
-		halign: 'center',
-	});
-	*/
+        $(function() {
+            var $window=$(window);
+            var canvas=document.getElementById('canvas');
 
-	// make sure the canvas stays contained
-//	$window.resize(contain.update).on('orientationchange', contain.update);
+            // contain element stuff
+            /*
+               var contain = new ContainElement({
+               id: 'easel',
+               height: $window.height(),
+               width: $window.width(),
+               valign: 'center',
+               halign: 'center',
+               });
+             */
 
-	canvas.width=$window.width();
-	canvas.height=$window.height();
-		
-	// flippyFramey things
-	var thumbs={
-		width:960,
-		height:540,
-		scheme:function(index){
-			return 'http://williamsny.github.io/flippy-framey/frames/thumbs/image-'+(index+1)+'.jpg';
-		},
-		index:0,
-	};
+            // make sure the canvas stays contained
+            //  $window.resize(contain.update).on('orientationchange', contain.update);
 
-	var full={
-		width:1920,
-		height:1080,
-		scheme:function(index){
-			return 'http://williamsny.github.io/flippy-framey/frames/full/image-'+(index+1)+'.jpg';
-		},
-		index:0,
-	};
+            canvas.width=$window.width();
+            canvas.height=$window.height();
 
-	var totalFrames=200;
-	var flipped=Page.flipped=flippyFramey({
-		thumbs:thumbs,
-		full:full,
-		frames:totalFrames-1, // ugly hack
-		upgradeDelay:50,
-		upgradeTries:10,
-	});
+            // flippyFramey things
+            var thumbs={
+                width:960,
+                height:540,
+                scheme:function(index){
+                    return 'http://williamsny.github.io/flippy-framey/frames/thumbs/image-'+(index+1)+'.jpg';
+                },
+                index:0,
+            };
 
-	// actually go get the thumbs
-	flipped.fetchThumbs();
+            var full={
+                width:1920,
+                height:1080,
+                scheme:function(index){
+                    return 'http://williamsny.github.io/flippy-framey/frames/full/image-'+(index+1)+'.jpg';
+                },
+                index:0,
+            };
 
-	// rollyScrolly stuff starts here
-	var events={};
+            var totalFrames=200;
+            var flipped=Page.flipped=flippyFramey({
+                thumbs:thumbs,
+                full:full,
+                frames:totalFrames-1, // ugly hack
+                upgradeDelay:50,
+                upgradeTries:10,
+            });
 
-	[	[33,'describe flippyFramey'],
-		[66,'describe rollyScrolly'],
-		[100,'describe contain-element'],
-		[133,'describe this page'],
-		[166,'attribution'],
-		[199,'by wny'],
-	].forEach(function(A,index){
-		events[A[0]]={
-			func:function(state){
-				$('article > p').removeClass('visible');
-				$('article > p:nth-Child('+(1+index)+')').addClass('visible');
-				console.log({
-					position:state.position,
-				});
-			},
-			label:A[1],
-		};
-	});
+            // actually go get the thumbs
+            flipped.fetchThumbs();
 
-	var scrollStack=[
-	{
-		func:function(state,index){
-			flipped.drawThumb(state.position);
-		},
-			label: 'draw image',
-		},
-	];
+            // rollyScrolly stuff starts here
+            var events={};
 
-	var rollyScrolled=rollyScrolly({
-		container:'body',
-		frames:220,
-		events:events,
-		stack:scrollStack
-	});
-});
+            [   [33,'describe flippyFramey'],
+                [66,'describe rollyScrolly'],
+                [100,'describe contain-element'],
+                [133,'describe this page'],
+                [166,'attribution'],
+                [199,'by wny'],
+            ].forEach(function(A,index){
+                events[A[0]]={
+                    func:function(state){
+                        $('article > p').removeClass('visible');
+                        $('article > p:nth-Child('+(1+index)+')').addClass('visible');
+                        console.log({
+                            position:state.position,
+                        });
+                    },
+                    label:A[1],
+                };
+            });
 
-</script>
+            var scrollStack=[
+            {
+                func:function(state,index){
+                    flipped.drawThumb(state.position);
+                },
+                    label: 'draw image',
+                },
+            ];
+
+            var rollyScrolled=rollyScrolly({
+                container:'body',
+                frames:220,
+                events:events,
+                stack:scrollStack
+            });
+        });
+    </script>
 </html>
