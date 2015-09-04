@@ -175,9 +175,6 @@
                     func:function(state){
                         $('article > p').removeClass('visible');
                         $('article > p:nth-Child('+(1+index)+')').addClass('visible');
-                        console.log({
-                            position:state.position,
-                        });
                     },
                     label:A[1],
                 };
@@ -187,6 +184,7 @@
             {
                 func:function(state,index){
                     flipped.drawThumb(state.position);
+                    console.log({ position:state.position, });
                 },
                     label: 'draw image',
                 },
