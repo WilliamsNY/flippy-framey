@@ -107,7 +107,7 @@ See https://github.com/WilliamsNY/flippy-framey for more details");
     // nothing but hoisted functions from here on
     function fetchThumbs(){
         var interval=window.setInterval(function(){
-            if(!thumbs.index in thumbs.images){
+            if(typeof thumbs.images[thumbs.index] == 'undefined'){
                 var src=thumbs.scheme(thumbs.index);
                 console.log(src);
                 thumbs.images[thumbs.index]=cache_image(src);
