@@ -54,17 +54,13 @@ See https://github.com/WilliamsNY/flippy-framey for more details");
         \nTerminating flippyFramey execution NOW.");
 		return;
 	}else{
-		// they passed in a value, for now let's just assume it's valid
-		// FIXME actually validate their input?
 		var thumbs=flipper.thumbs=opt.thumbs;
 		thumbs.images={};
-		/*
-			They should have passed:
-				width: a positive integer,
-				height: a positive integer,
-				scheme: a function which returns a url when given an index,
-				index: a non-negative integer, probably 0
-		*/
+
+        thumbs.validated=validate(thumbs);
+        if(Object.keys(thumbs.validated).length){
+            console.error(thumbs.validated);
+        }
 	}
 
 	// check if they passed details for full quality image set
@@ -82,11 +78,12 @@ See https://github.com/WilliamsNY/flippy-framey for more details");
 		var full=flipper.full=opt.full;
 		full.images={};
 
-		// TODO validate flipper.full using the same criteria applied to flipper.thumbs (once that's done)
-		// unlike thumbs, full's images attribute should refer to an object, not an array
+        full.validated=validate(full);
+        if(Object.keys(full.validated).length){
+            console.error(full.validated);
+        }
 
 		// there are a few other things that you should check for
-		// 
 		flipper.upgradeDelay=opt.upgradeDelay||50;
 		flipper.upgradeTries=opt.upgradeTries||10;
 	}
@@ -138,11 +135,38 @@ See https://github.com/WilliamsNY/flippy-framey for more details");
 
 	// wrap up drawImage since you probably just want to specify the index of the image
 	function drawThumb(index){
-		drawImage({
-			image:thumbs.images[index],
-			width:thumbs.width,
-			height:thumbs.height,
-		});
+        // cancel any pending upgrades, since we don't want to them to load and show at the wrong position
+        if(flipper.pendingUpgrade){
+            window.clearTimeout(flipper.pendingUpgrade);
+        }
+
+        // the user might have scrolled down past where the images have loaded
+        if(!index in thumbs.images){
+            var src=thumbs.scheme(index);
+            var tries=flipper.upgradeTries;
+            thumbs.images[index]=cache_image(src);
+            flipper.pendingUpgrade=window.setInterval(function(){
+                if(is_cached(src)){
+                    drawImage({
+                        image:thumbs.images[index],
+                        width:thumbs.width,
+                        height:thumbs.height,
+                    });
+                    window.clearInterval(flipper.pendingUpgrade);
+                }else{
+                    tries--;
+                    if(!tries){
+                        window.clearInterval(flipper.pendingUpgrade);
+                    }
+                }
+            },flipper.upgradeDelay);
+        }else{
+            drawImage({
+                image:thumbs.images[index],
+                width:thumbs.width,
+                height:thumbs.height,
+            });
+        }
 		// set a timeout here to upgrade to full images, if a full image exists.
 		if(flipper.canUpgrade){
 			// if there's a pending timeout, cancel it
@@ -223,4 +247,21 @@ See https://github.com/WilliamsNY/flippy-framey for more details");
 			func(flipper);
 		});
 	};
+
+    function validate(cfg){
+        var errors={};
+        if(!(typeof cfg.width == 'number' && cfg.width > 0))
+            errors.width="width should be a positive integer";
+
+        if(!(typeof cfg.height == 'number' && cfg.height > 0))
+            errors.height="height should be a positive integer";
+
+        if(!(typeof cfg.scheme == 'function' && (typeof cfg.scheme(1) == 'string')))
+            errors.scheme="scheme should be a function which takes an integer and returns a string";
+
+        if(!(typeof cfg.index == 'number'))
+            errors.index="index should be an integer";
+
+        return errors;
+    };
 }
