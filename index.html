@@ -149,11 +149,11 @@
                 index:0,
             };
 
-            var totalFrames=200;
+            var totalFrames=199;
             var flipped=Page.flipped=flippyFramey({
                 thumbs:thumbs,
                 full:full,
-                frames:totalFrames-1, // ugly hack
+                frames:totalFrames, // ugly hack
                 upgradeDelay:50,
                 upgradeTries:10,
             });
@@ -192,7 +192,7 @@
 
             var rollyScrolled=rollyScrolly({
                 container:'body',
-                frames:220,
+                frames:totalFrames,
                 events:events,
                 stack:scrollStack
             });
