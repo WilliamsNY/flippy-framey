@@ -28,6 +28,7 @@ function flippyFramey(opt){
 			if(typeof f == 'function'){
 				flipper.stacks[hook].push(f);
 			}
+            return flipper;
 		};
 
 		// and a convenient callback for invocation on the occurrence of that event
@@ -106,11 +107,12 @@ See https://github.com/WilliamsNY/flippy-framey for more details");
 	// nothing but hoisted functions from here on
 	function fetchThumbs(){
 		var interval=window.setInterval(function(){
-			var src=thumbs.scheme(thumbs.index);
-			console.log(src);
-			thumbs.images[thumbs.index]=cache_image(src);
-
-			thumbs.index++;
+            if(!thumbs.index in thumbs.images){
+                var src=thumbs.scheme(thumbs.index);
+                console.log(src);
+                thumbs.images[thumbs.index]=cache_image(src);
+            }
+            thumbs.index++;
 			if(thumbs.index>=opt.frames){
 				window.clearInterval(interval);
 				flipper.invoke.fetchCompletion();
