@@ -21,21 +21,11 @@ This library exports a single function, `flippyFramey`. It takes a single argume
 
 The function assumes:
 
-* you have already included jquery for the page
-  + (if there's a demand for it a pure js version could be made, but we use jQuery and so does almost everyone else). If you're curious, we use:
-    - the selector syntax
-    - animate (for scrollTo)
-    - `.css()`
-    - `.height()`
-    - `.width()`
-    - `.on()`
-    - `.resize()`
 * you have a canvas somewhere on the page
-* you have two sets of images (low and high quality)
+* you have at least one sets of images and no more than two (low and high quality)
 * your images are hosted somewhere, and:
   + your image sets follow a consistent naming scheme
   + your image sets have consistent sizes (identical pixel measurements)
-* you have a consistent naming scheme for low and high quality images
 
 Below you'll find an example of how you can call the `flippyFramey` function. This example passes the options that would be used by default anyway, so any configuration attributes that suit your purposes can be omitted at your discretion.
 
@@ -44,18 +34,16 @@ Below you'll find an example of how you can call the `flippyFramey` function. Th
 // there are no sensible defaults for these values
 // just define them outside of the function call and pass them in
 var thumbs={
-	width:640,
-	height:413,
-	images:[],
+	width:960,
+	height:540,
 	scheme:function(index){
 		return 'http://your.content.distribution.network/and/naming/scheme/thumbs/image_'+index;
 	},
 	index:0,
 };
 var full={
-	width:2048,
-	height:1320,
-	images:[],
+	width:1920,
+	height:1080,
 	scheme:function(index){
 		return 'http://your.content.distribution.network/and/naming/scheme/thumb/image_'+index;
 	},
@@ -63,7 +51,6 @@ var full={
 };
 
 var flipper=flippyFramey({
-	/* WIP */
 	// flippyFramey will draw to the canvas with the following id
 	canvas:'canvas',
 
@@ -82,7 +69,7 @@ var flipper=flippyFramey({
 	upgradeDelay:50,	
 
 	// how many times should you try to upgrade before giving up?
-	upgradeAttempts:10,
+	upgradeTries:10,
 
 	callback:function(flipperState){
 		// when function setup is complete, this function will be called
@@ -92,6 +79,31 @@ var flipper=flippyFramey({
 		// flipperState is just the same object that is used internally within flippyFramey
 		// that object is returned and assigned to 'flipper' within this example
 	},
+});
+```
+
+The object returned by flippyFramey has attributes that you can then use to manipulate it's behaviour.
+
+For instance, you can extend it via a number of hooks, like so:
+
+```
+flipper.on.fetchCompletion(function(){
+    // maybe you didn't want to allow the user to scroll
+    // until all the images had been loaded..
+    // start with scrolling disabled
+    // then enable it here
+});
+
+flipper.on.upgradeFailure(function(){
+    // notify when a full quality image has failed to load
+});
+
+flipper.on.upgradeSuccess(function(){
+    // notify when an image has successfully upgraded to a full quality version
+});
+
+flipper.on.draw(function(){
+    // called whenever an image is drawn to the canvas
 });
 ```
 
