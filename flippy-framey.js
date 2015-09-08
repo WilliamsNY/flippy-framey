@@ -117,7 +117,7 @@ See https://github.com/WilliamsNY/flippy-framey for more details");
                 window.clearInterval(interval);
                 flipper.invoke.fetchCompletion();
             }
-        },50);
+        },opt.rate||50);
     };
 
     function drawImage(opt){
