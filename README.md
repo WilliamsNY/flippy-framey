@@ -51,14 +51,15 @@ var flipper=flippyFramey({
     // flippyFramey will draw to the canvas with the following id
     canvas:'canvas',
 
-    // the image index from which you'd like to start counting
-    state:0,
-
     // passing in the details for our thumbnail image set defined above
     thumbs:thumbs,
 
     // passing in the details for our full quality image set defined above
     full:full,
+
+    // the rate at which thumbnails are fetched (1/rate)
+    // default is 1 thumbnail per 50ms
+    rate: 20,
 
     // the time an image must remain static before upgrading to the full quality version
     // this never gets used unless you pass an actual value to the 'full' attribute
