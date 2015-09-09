@@ -56,7 +56,7 @@ See https://github.com/WilliamsNY/flippy-framey for more details");
         return;
     }else{
         var thumbs=flipper.thumbs=opt.thumbs;
-        thumbs.images={};
+        thumbs.images=opt.images||{};
 
         thumbs.validated=validate(thumbs);
         if(Object.keys(thumbs.validated).length){
